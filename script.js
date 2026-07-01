@@ -7,9 +7,24 @@ taskForm.addEventListener("submit", function (event) {
 
   if (taskInput.value.trim().length !== 0) {
     //if (taskInput.value.trim()) { też zadziała, bo pusty string jest false
-    const taskItem = document.createElement("li");
-    taskItem.textContent = taskInput.value;
-    taskList.appendChild(taskItem);
+
+    createTask(taskInput.value);
   }
   taskInput.value = "";
 });
+
+function createTask(text) {
+  const taskItem = document.createElement("li");
+  taskItem.classList.add("task-item");
+  const span = document.createElement("span");
+  const button = document.createElement("button");
+  button.textContent = "Delete";
+  span.textContent = text;
+  taskItem.appendChild(span);
+  taskItem.appendChild(button);
+  taskList.appendChild(taskItem);
+
+  button.addEventListener("click", function () {
+    taskItem.remove();
+  });
+}
