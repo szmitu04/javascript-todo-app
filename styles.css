@@ -64,3 +64,12 @@ button:hover {
   padding: 0;
   margin: 20px 0 0 0;
 }
+span {
+  cursor: pointer;
+}
+.completed {
+  text-decoration: line-through;
+
+  color: darkgray;
+  opacity: 0.5;
+}
