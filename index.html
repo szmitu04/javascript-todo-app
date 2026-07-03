@@ -4,16 +4,25 @@
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
   <body>
-    <div class="container">
-      <h1>TODO List</h1>
+    <div class="app">
+      <div class="container">
+        <h1>TODO List</h1>
 
-      <form id="taskForm">
-        <label for="task">Task</label>
-        <input type="text" id="task" name="task" placeholder="Add task" />
-        <button type="submit">Submit</button>
-      </form>
-      <ul id="taskList"></ul>
-      <script src="script.js"></script>
+        <form id="taskForm">
+          <label for="task">Task</label>
+          <input type="text" id="task" name="task" placeholder="Add task" />
+          <button type="submit">Submit</button>
+        </form>
+
+        <ul id="taskList"></ul>
+        <script src="script.js"></script>
+      </div>
+      <div class="sidebar">
+        <h3>Filter</h3>
+        <button id="allBtn">All</button>
+        <button id="activeBtn">Active</button>
+        <button id="completedBtn">Completed</button>
+      </div>
     </div>
   </body>
 </html>

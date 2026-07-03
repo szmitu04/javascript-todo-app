@@ -1,7 +1,12 @@
 const taskForm = document.querySelector("#taskForm");
 const taskList = document.querySelector("#taskList");
 const taskInput = document.querySelector("#task");
+const allBtn = document.querySelector("#allBtn");
+const activeBtn = document.querySelector("#activeBtn");
+const completedBtn = document.querySelector("#completedBtn");
+
 let tasks = [];
+let currentFilter = "all";
 
 taskForm.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -15,12 +20,12 @@ taskForm.addEventListener("submit", function (event) {
 
     tasks.push(newTask);
     saveTasks();
-    createTask(newTask);
+    renderTasks();
   }
   taskInput.value = "";
 });
 
-function createTask(task) {
+function createTask(task, index) {
   const taskItem = document.createElement("li");
   taskItem.classList.add("task-item");
   const span = document.createElement("span");
@@ -36,12 +41,14 @@ function createTask(task) {
   taskList.appendChild(taskItem);
   span.addEventListener("click", function () {
     task.completed = !task.completed;
-    span.classList.toggle("completed");
     saveTasks();
+    renderTasks();
   });
 
   button.addEventListener("click", function () {
-    taskItem.remove();
+    tasks.splice(index, 1);
+    saveTasks();
+    renderTasks();
   });
 }
 
@@ -53,9 +60,26 @@ function loadTasks() {
   const saved = localStorage.getItem("tasks");
   if (saved) {
     tasks = JSON.parse(saved);
-    tasks.forEach((element) => {
-      createTask(element);
-    });
+    renderTasks();
   }
 }
 loadTasks();
+
+function renderTasks() {
+  taskList.innerHTML = "";
+  tasks.forEach((task, index) => {
+    createTask(task, index);
+  });
+}
+
+allBtn.addEventListener("click", function () {
+  renderTasks();
+});
+
+activeBtn.addEventListener("click", function () {
+  taskList.innerHTML = "";
+  const filteredArray = tasks.filter((task) => task.completed === false);
+  filteredArray.forEach((task, index) => {
+    createTask(task, index);
+  });
+});
