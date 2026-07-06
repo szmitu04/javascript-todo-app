@@ -90,3 +90,14 @@ span {
 
   max-width: 500px;
 }
+.statistics {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: whitesmoke;
+  border-radius: 25px;
+  padding: 5px;
+}
+.statistics p {
+  margin: 0;
+}

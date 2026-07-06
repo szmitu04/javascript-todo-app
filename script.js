@@ -4,6 +4,9 @@ const taskInput = document.querySelector("#task");
 const allBtn = document.querySelector("#allBtn");
 const activeBtn = document.querySelector("#activeBtn");
 const completedBtn = document.querySelector("#completedBtn");
+const totalTasks = document.querySelector("#totalAmnt");
+const remainingTasks = document.querySelector("#remainingAmnt");
+const completedTasks = document.querySelector("#completedAmnt");
 
 let tasks = [];
 let currentFilter = "all";
@@ -25,7 +28,7 @@ taskForm.addEventListener("submit", function (event) {
   taskInput.value = "";
 });
 
-function createTask(task, index) {
+function createTask(task) {
   const taskItem = document.createElement("li");
   taskItem.classList.add("task-item");
   const span = document.createElement("span");
@@ -46,7 +49,9 @@ function createTask(task, index) {
   });
 
   button.addEventListener("click", function () {
-    tasks.splice(index, 1);
+    const removedList = tasks.findIndex((t) => t === task); //szuka objektu w liscie objektów który jest klikanym objektem
+
+    tasks.splice(removedList, 1);
     saveTasks();
     renderTasks();
   });
@@ -67,19 +72,37 @@ loadTasks();
 
 function renderTasks() {
   taskList.innerHTML = "";
-  tasks.forEach((task, index) => {
+
+  let filteredTasks = tasks;
+  if (currentFilter === "active") {
+    filteredTasks = tasks.filter((task) => !task.completed);
+  } else if (currentFilter === "completed") {
+    filteredTasks = tasks.filter((task) => task.completed);
+  }
+
+  filteredTasks.forEach((task) => {
     createTask(task, index);
   });
+  renderStatistics();
 }
 
 allBtn.addEventListener("click", function () {
+  currentFilter = "all";
   renderTasks();
 });
 
 activeBtn.addEventListener("click", function () {
-  taskList.innerHTML = "";
-  const filteredArray = tasks.filter((task) => task.completed === false);
-  filteredArray.forEach((task, index) => {
-    createTask(task, index);
-  });
+  currentFilter = "active";
+  renderTasks();
 });
+
+completedBtn.addEventListener("click", function () {
+  currentFilter = "completed";
+  renderTasks();
+});
+
+function renderStatistics() {
+  totalTasks.textContent = tasks.length;
+  remainingTasks.textContent = tasks.filter((task) => !task.completed).length;
+  completedTasks.textContent = tasks.filter((task) => task.completed).length;
+}
