@@ -1,9 +1,15 @@
+:root {
+  --primary-color: #ffe8b4;
+  --secondary-color: #e68457;
+  --accent-color: #aa1c41;
+}
+
 body {
   margin: 0;
   text-align: center;
   font-family: sans-serif;
 
-  background-color: #f2f2f2;
+  background-color: var(--primary-color);
 
   display: flex;
 
@@ -11,6 +17,7 @@ body {
 
   padding-top: 70px;
 }
+
 form {
   display: flex;
   gap: 10px;
@@ -31,15 +38,18 @@ button {
   cursor: pointer;
   border: none;
   border-radius: 10px;
-  transition: background-color 0.5s;
+  transition:
+    background-color 0.5s,
+    color 0.5s;
 }
 
 button:hover {
-  background-color: red;
+  background-color: var(--accent-color);
+  color: #e68457;
 }
 
 .container {
-  background-color: rgb(228, 127, 127);
+  background-color: var(--secondary-color);
 
   padding: 10px;
   border-radius: 25px;
@@ -50,7 +60,7 @@ button:hover {
 }
 
 .task-item {
-  background-color: rgb(255, 255, 255);
+  background-color: var(--primary-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -84,7 +94,7 @@ span {
   flex-direction: column;
   gap: 10px;
   padding: 10px;
-  background-color: rgb(228, 127, 127);
+  background-color: var(--secondary-color);
   border-radius: 25px;
   width: 150px;
 
@@ -94,10 +104,18 @@ span {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: whitesmoke;
+  background-color: var(--primary-color);
   border-radius: 25px;
   padding: 5px;
 }
 .statistics p {
   margin: 0;
+}
+.task-actions {
+  display: flex;
+  gap: 8px;
+}
+.filter-btn.active {
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
 }
