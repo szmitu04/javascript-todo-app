@@ -8,9 +8,13 @@ const totalTasks = document.querySelector("#totalAmnt");
 const remainingTasks = document.querySelector("#remainingAmnt");
 const completedTasks = document.querySelector("#completedAmnt");
 const filterButtons = document.querySelectorAll(".filter-btn");
+const dueDate = document.querySelector("#taskDate");
 
 let tasks = [];
 let currentFilter = "all";
+const today = new Date();
+
+dueDate.value = today.toISOString().split("T")[0];
 
 taskForm.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -20,6 +24,7 @@ taskForm.addEventListener("submit", function (event) {
     const newTask = {
       text: taskInput.value,
       completed: false,
+      dueDate: dueDate.value,
     };
 
     tasks.push(newTask);
@@ -49,7 +54,15 @@ function createTask(task) {
     span.classList.add("completed");
   }
 
+  const dueDateElement = document.createElement("small");
+  dueDateElement.classList.add("due-date");
+
+  dueDateElement.textContent = new Date(task.dueDate).toLocaleDateString(
+    "en-GB",
+  );
+
   taskContent.appendChild(span);
+  //taskContent.appendChild(dueDateElement); //usunołem dla estetyki, nie trzeba dwa razy pisać daty zadania, bo jest już w tytule grupy zadań
   taskActions.appendChild(button);
   taskActions.appendChild(editButton);
 
@@ -125,11 +138,47 @@ function renderTasks() {
     filteredTasks = tasks.filter((task) => task.completed);
   }
 
-  filteredTasks.forEach((task) => {
-    createTask(task);
+  filteredTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+  const groupedTasks = Object.groupBy(filteredTasks, ({ dueDate }) => dueDate); // Fajnie działa ale zwraca objekt
+
+  Object.entries(groupedTasks).forEach(([date, tasks]) => {
+    createTitle(date);
+
+    tasks.forEach((task) => {
+      createTask(task);
+    });
   });
+
   renderStatistics();
   updateFilterButtons();
+}
+
+function createTitle(tasksDate) {
+  const titleDate = document.createElement("h3");
+  titleDate.classList.add("task-date");
+
+  const dateOfTask = new Date(tasksDate);
+  dateOfTask.setHours(0, 0, 0, 0);
+
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+
+  const tomorrowDate = new Date(todayDate);
+  tomorrowDate.setHours(0, 0, 0, 0);
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+
+  if (dateOfTask.getTime() === todayDate.getTime()) {
+    titleDate.textContent = "Today";
+  } else if (dateOfTask.getTime() < todayDate.getTime()) {
+    titleDate.textContent = "Overdue";
+  } else if (dateOfTask.getTime() === tomorrowDate.getTime()) {
+    titleDate.textContent = "Tomorrow";
+  } else {
+    titleDate.textContent = new Date(tasksDate).toLocaleDateString("pl-PL");
+  }
+
+  taskList.appendChild(titleDate);
 }
 
 filterButtons.forEach((button) => {

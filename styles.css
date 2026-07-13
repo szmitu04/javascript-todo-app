@@ -119,3 +119,8 @@ span {
   background-color: var(--accent-color);
   color: var(--secondary-color);
 }
+.task-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
